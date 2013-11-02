@@ -1,0 +1,3 @@
+Use resize2fs/nc/dd to copy the whole partitions
+
+It will useful in case you have partitions with many small files.
