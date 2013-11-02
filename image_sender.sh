@@ -11,6 +11,7 @@ port=255
 bs=16k
 
 dst=$1
+shift
 
 function get_image_size_in_bs()
 {
