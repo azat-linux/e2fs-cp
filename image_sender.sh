@@ -10,6 +10,8 @@
 port=255
 bs=16k
 
+dst=$1
+
 function get_image_size_in_bs()
 {
     local bs_size=$(df $1 -B$bs | awk '{print $2}')
@@ -20,6 +22,6 @@ set -e
 set -x
 
 for fs in $*; do
-    dd if=$fs bs=$bs iflag=direct count=$(get_image_size_in_bs $fs) | tee >(md5sum >&2) | nc -q1 dst $port
+    dd if=$fs bs=$bs iflag=direct count=$(get_image_size_in_bs $fs) | tee >(md5sum >&2) | nc -q1 $dst $port
 done
 
