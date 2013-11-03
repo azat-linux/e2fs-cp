@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+set -e
+set -x
+
 function last_mount_point()
 {
     dumpe2fs -h $1 2>/dev/null | grep 'Last mounted on' | awk '{print $NF}'
