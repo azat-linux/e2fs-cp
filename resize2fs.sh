@@ -23,6 +23,6 @@ mkdir -p $logs
 
 # resize
 (for fs in $*; do
-    echo "$fs $(get_min_block_size_kb $fs) >& $logs/$(basename $fs).resize2fs.log"
+    echo "$fs $(get_min_block_size_kb $fs)K >& $logs/$(basename $fs).resize2fs.log"
 done) | xargs -I{} -P10 bash -c "time resize2fs {}"
 
