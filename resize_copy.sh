@@ -25,4 +25,5 @@ copy_scripts $dst
 ssh $src ~/resize_copy/resize2fs.sh $*
 ssh $dst ~/resize_copy/image_receiver.sh $* &
 ssh $src ~/resize_copy/image_sender.sh $dst $*
+ssh $dst ~/resize_copy/uuid.sh $*
 
