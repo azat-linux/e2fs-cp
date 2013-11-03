@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#
+# TODO: not sure about e2fsck -y option (is this safe?)
+#
+
 set -e
 set -x
 
@@ -9,5 +13,5 @@ mkdir -p $logs
 # e2fck
 (for fs in $*; do
     echo "$fs >& $logs/$(basename $fs).e2fsck.log"
-done) | xargs -I{} -P10 bash -c "time e2fsck -f {}"
+done) | xargs -I{} -P10 bash -c "time e2fsck -y -f {}"
 
