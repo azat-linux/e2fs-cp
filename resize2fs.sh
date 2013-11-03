@@ -7,7 +7,7 @@
 
 function get_min_block_size_kb()
 {
-    kb_size=$(df $1 | awk '{print $2}')
+    kb_size=$(df $1 | tail -n1 | awk '{print $2}')
     reserved_kb_size=$(( kb_size + (1024 * 1024 * 10) )) # 10 GiB
     echo $reserved_kb_size
 }
