@@ -7,6 +7,10 @@
 
 function get_min_block_size_kb()
 {
+    # We must avoid mount()
+    # since after this we can't resize2fs because
+    # resize/main.c: "fs->super->s_lastcheck < fs->super->s_mtime"
+    # (because other previous checks is passed)
     mount $1
     kb_size=$(df -BK $1 | tail -n1 | awk '{print $3}' | tr -d K)
     umount $1
