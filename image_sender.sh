@@ -7,7 +7,7 @@
 # NOTE: md5sum is 300-400 MB/s so it won't slow down copying
 #
 
-port=255
+start_port=255
 bs=16k
 
 dst=$1
@@ -22,7 +22,9 @@ function get_image_size_in_bs()
 set -e
 set -x
 
+port=$start_port
 for fs in $*; do
-    dd if=$fs bs=$bs iflag=direct count=$(get_image_size_in_bs $fs) | tee >(md5sum >&2) | nc -q1 $dst $port
+    dd if=$fs bs=$bs iflag=direct count=$(get_image_size_in_bs $fs) | tee >(md5sum >&2) | nc -q1 $dst $port &
+    let ++port
 done
 
