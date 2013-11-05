@@ -15,7 +15,7 @@ shift
 
 function get_image_size_in_bs()
 {
-    local bs_size=$(df $1 -B$bs | awk '{print $2}')
+    local bs_size=$(df $1 -B$bs | tail -n1 | awk '{print $2}')
     echo $bs_size
 }
 
