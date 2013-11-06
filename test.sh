@@ -61,5 +61,6 @@ fsck test.img
 dd if=test.img of=test_dup.img bs=4k count=$min_size_4k oflag=direct
 sync
 image_info test_dup.img
+md5sum test.img test_dup.img
 fsck test_dup.img
 
