@@ -43,6 +43,7 @@ image_info test.img
 umount mnt
 
 min_size_4k=$(resize2fs -P test.img 2>/dev/null | awk '{print $NF}')
+e2fsck -vvvv -f test.img
 resize2fs -M test.img
 e2fsck -vvvv -f test.img
 
