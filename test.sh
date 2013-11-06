@@ -16,6 +16,11 @@ function create_random()
     dd if=/dev/urandom bs=1M count=1 >| $1 2>/dev/null
 }
 
+function fsck()
+{
+    e2fsck -vvvv -f $1
+}
+
 # create
 fallocate -l $((1024 * 1024 * 512)) test.img
 mke2fs -F -t ext4 test.img
@@ -43,13 +48,13 @@ image_info test.img
 umount mnt
 
 min_size_4k=$(resize2fs -P test.img 2>/dev/null | awk '{print $NF}')
-e2fsck -vvvv -f test.img
+fsck test.img
 resize2fs -M test.img
-e2fsck -vvvv -f test.img
+fsck test.img
 
 # copy and check
 dd if=test.img of=test_dup.img bs=4k count=$min_size_4k oflag=direct
 sync
 image_info test_dup.img
-e2fsck -vvvv -f test_dup.img
+fsck test_dup.img
 
