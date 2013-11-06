@@ -9,6 +9,7 @@ set -e
 
 a=${1:-"test.img"}
 b=${2:-"test_dup.img"}
+create_delete_iterations=${3:-30}
 
 # system configuration
 uname -a
@@ -66,16 +67,16 @@ mkdir -p mnt
 mnt $a
 
 # fill it, with holes
-for i in {1..30}; do
+for i in $(seq 1 $create_delete_iterations); do
     create_random mnt/${i}.test
 done
 # create holes
-for i in {1..30}; do
+for i in $(seq 1 $create_delete_iterations); do
     if [ $((i % 2)) -eq 0 ]; then
         rm mnt/${i}.test
     fi
 done
-for i in {1..45}; do
+for i in $(seq 1 $create_delete_iterations); do
     create_random mnt/${i}.test
 done
 
