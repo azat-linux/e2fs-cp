@@ -37,9 +37,15 @@ function mnt()
     fi
 }
 
+function fill_image()
+{
+    if ! $(file $1 2>/dev/null | grep -q "sticky block special"); then
+        fallocate -l $((1024 * 1024 * 512)) $1
+    fi
+}
 
 # create
-fallocate -l $((1024 * 1024 * 512)) $a
+fill_image $a
 mke2fs -F -t ext4 $a
 fsck $a
 
