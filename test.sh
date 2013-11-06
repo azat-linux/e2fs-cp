@@ -6,8 +6,6 @@
 
 function image_info()
 {
-    df -B4K test.img
-    df -i test.img
     dumpe2fs -h test.img
 }
 
