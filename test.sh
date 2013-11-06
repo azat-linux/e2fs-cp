@@ -54,7 +54,7 @@ umount mnt
 
 min_size_4k=$(resize2fs -P test.img 2>/dev/null | awk '{print $NF}')
 fsck test.img
-resize2fs -M test.img
+resize2fs test.img $min_size_4k
 fsck test.img
 
 # copy and check
