@@ -39,11 +39,11 @@ umount mnt
 
 min_size_4k=$(resize2fs -P test.img 2>/dev/null | awk '{print $NF}')
 resize2fs -M test.img
-e2fsck test.img
+e2fsck -y -vvvv -f test.img
 
 # copy and check
 dd if=test.img of=test_dup.img bs=4k count=$min_size_4k oflag=direct
 sync
 image_info test_dup.img
-e2fsck test_dup.img
+e2fsck -y -vvvv -f test_dup.img
 
