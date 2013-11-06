@@ -7,6 +7,9 @@
 
 set -e
 
+# system configuration
+uname -a
+
 function image_info()
 {
     dumpe2fs -h test.img
