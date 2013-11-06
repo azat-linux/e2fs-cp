@@ -7,12 +7,15 @@
 
 set -e
 
+a=${1:-"test.img"}
+b=${2:-"test_dup.img"}
+
 # system configuration
 uname -a
 
 function image_info()
 {
-    dumpe2fs -h test.img
+    dumpe2fs -h $a
 }
 
 function create_random()
@@ -26,13 +29,13 @@ function fsck()
 }
 
 # create
-fallocate -l $((1024 * 1024 * 512)) test.img
-mke2fs -F -t ext4 test.img
-fsck test.img
+fallocate -l $((1024 * 1024 * 512)) $a
+mke2fs -F -t ext4 $a
+fsck $a
 
 # mount
 mkdir -p mnt
-mount -o loop -t ext4 test.img mnt
+mount -o loop -t ext4 $a mnt
 
 # fill it, with holes
 for i in {1..30}; do
@@ -49,18 +52,18 @@ for i in {1..45}; do
 done
 
 sync
-image_info test.img
+image_info $a
 umount mnt
 
-min_size_4k=$(resize2fs -P test.img 2>/dev/null | awk '{print $NF}')
-fsck test.img
-resize2fs test.img $min_size_4k
-fsck test.img
+min_size_4k=$(resize2fs -P $a 2>/dev/null | awk '{print $NF}')
+fsck $a
+resize2fs $a $min_size_4k
+fsck $a
 
 # copy and check
-dd if=test.img of=test_dup.img bs=4k count=$min_size_4k oflag=direct
+dd if=$a of=$b bs=4k count=$min_size_4k oflag=direct
 sync
-image_info test_dup.img
-md5sum test.img test_dup.img
-fsck test_dup.img
+image_info $b
+md5sum $a $b
+fsck $b
 
