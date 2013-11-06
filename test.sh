@@ -38,12 +38,13 @@ mount -o loop -t ext4 test.img mnt
 for i in {1..30}; do
     create_random mnt/${i}.test
 done
+# create holes
 for i in {1..30}; do
     if [ $((i % 2)) -eq 0 ]; then
         rm mnt/${i}.test
     fi
 done
-for i in {1..30}; do
+for i in {1..45}; do
     create_random mnt/${i}.test
 done
 
