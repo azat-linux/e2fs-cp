@@ -22,7 +22,7 @@ function fsck()
 # create
 fallocate -l $((1024 * 1024 * 512)) test.img
 mke2fs -F -t ext4 test.img
-e2fsck test.img
+fsck test.img
 
 # mount
 mkdir -p mnt
