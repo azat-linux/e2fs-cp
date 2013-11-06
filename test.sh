@@ -9,7 +9,8 @@ set -e
 
 a=${1:-"test.img"}
 b=${2:-"test_dup.img"}
-create_delete_iterations=${3:-30}
+size=${3:-$((1024 * 1024 * 512))} # 512 MiB
+create_delete_iterations=${4:-30}
 
 # system configuration
 uname -a
@@ -46,7 +47,7 @@ function mnt()
 function fill_image()
 {
     if ! is_block_device $1; then
-        fallocate -l $((1024 * 1024 * 512)) $1
+        fallocate -l $size $1
     fi
 }
 
