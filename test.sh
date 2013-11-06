@@ -28,9 +28,14 @@ function fsck()
     e2fsck -vvvv -f $1
 }
 
+function is_block_device()
+{
+    return $(file $1 2>/dev/null | grep -q "sticky block special")
+}
+
 function mnt()
 {
-    if $(file $1 2>/dev/null | grep -q "sticky block special"); then
+    if is_block_device $1; then
         mount -t ext4 $1 mnt
     else
         mount -o loop -t ext4 $1 mnt
@@ -39,7 +44,7 @@ function mnt()
 
 function fill_image()
 {
-    if ! $(file $1 2>/dev/null | grep -q "sticky block special"); then
+    if ! is_block_device $1; then
         fallocate -l $((1024 * 1024 * 512)) $1
     fi
 }
