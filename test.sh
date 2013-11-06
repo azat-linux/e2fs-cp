@@ -4,7 +4,8 @@
 # If copying using simple dd, after resize2fs using shrinked size,
 # fsck report errors, this script for investigating it
 #
-#
+
+set -e
 
 function image_info()
 {
