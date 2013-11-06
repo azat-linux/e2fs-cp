@@ -28,6 +28,16 @@ function fsck()
     e2fsck -vvvv -f $1
 }
 
+function mnt()
+{
+    if $(file $1 2>/dev/null | grep -q "sticky block special"); then
+        mount -t ext4 $1 mnt
+    else
+        mount -o loop -t ext4 $1 mnt
+    fi
+}
+
+
 # create
 fallocate -l $((1024 * 1024 * 512)) $a
 mke2fs -F -t ext4 $a
@@ -35,7 +45,7 @@ fsck $a
 
 # mount
 mkdir -p mnt
-mount -o loop -t ext4 $a mnt
+mnt $a
 
 # fill it, with holes
 for i in {1..30}; do
