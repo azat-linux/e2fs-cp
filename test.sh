@@ -49,6 +49,13 @@ function fill_image()
     fi
 }
 
+function calc_md5sum()
+{
+    if ! is_block_device $1; then
+        md5sum $1
+    fi
+}
+
 # create
 fill_image $a
 mke2fs -F -t ext4 $a
@@ -85,6 +92,7 @@ fsck $a
 dd if=$a of=$b bs=4k count=$min_size_4k oflag=direct
 sync
 image_info $b
-md5sum $a $b
+calc_md5sum $a
+calc_md5sum $b
 fsck $b
 
