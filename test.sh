@@ -11,6 +11,11 @@ function image_info()
     dumpe2fs -h test.img
 }
 
+function create_random()
+{
+    dd if=/dev/urandom bs=1M count=1 >| $1 2>/dev/null
+}
+
 # create
 fallocate -l $((1024 * 1024 * 512)) test.img
 mke2fs -F -t ext4 test.img
@@ -22,7 +27,7 @@ mount -o loop -t ext4 test.img mnt
 
 # fill it, with holes
 for i in {1..30}; do
-    dd if=/dev/urandom bs=1M count=1 >| mnt/${i}.test
+    create_random mnt/${i}.test
 done
 for i in {1..30}; do
     if [ $((i % 2)) -eq 0 ]; then
@@ -30,7 +35,7 @@ for i in {1..30}; do
     fi
 done
 for i in {1..30}; do
-    dd if=/dev/urandom bs=1M count=1 >| mnt/${i}.test
+    create_random mnt/${i}.test
 done
 
 sync
