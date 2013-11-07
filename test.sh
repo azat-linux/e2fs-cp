@@ -37,10 +37,24 @@ function is_block_device()
 
 function mnt()
 {
-    if is_block_device $1; then
-        mount -t ext4 $1 mnt
+    img=$1
+    shift
+
+    mnt_opts="$*"
+
+
+    if is_block_device $img; then
+        if [ ! -z "$mnt_opts" ]; then
+            mnt_opts="-o $mnt_opts"
+        fi
+
+        mount -t ext4 $img mnt
     else
-        mount -o loop -t ext4 $1 mnt
+        if [ ! -z "$mnt_opts" ]; then
+            mnt_opts=",$mnt_opts"
+        fi
+
+        mount -o loop$mnt_opts -t ext4 $img mnt
     fi
 }
 
@@ -89,6 +103,8 @@ min_size_4k=$(resize2fs -P $a 2>/dev/null | awk '{print $NF}')
 fsck $a
 resize2fs $a $min_size_4k
 fsck $a
+
+mnt $a ro
 
 # copy and check
 nc -nlp 2048 | tee >(md5sum >&2) | dd of=$b oflag=direct iflag=fullblock & # receiver
