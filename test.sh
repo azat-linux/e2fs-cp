@@ -91,7 +91,10 @@ resize2fs $a $min_size_4k
 fsck $a
 
 # copy and check
-dd if=$a of=$b bs=4k count=$min_size_4k oflag=direct
+nc -nlp 2048 | tee >(md5sum >&2) | dd of=$b oflag=direct iflag=fullblock & # receiver
+sleep 1
+dd if=$a bs=4k count=$min_size_4k | tee >(md5sum >&2) | nc -q1 localhost 2048 # sender
+
 sync
 image_info $b
 calc_md5sum $a
