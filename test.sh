@@ -72,6 +72,20 @@ function calc_md5sum()
     fi
 }
 
+# do an acitivity, in parallel, while copying is in progress
+function read_activity()
+{
+    img=$1
+    mnt=$2
+
+    dd if=$img of=/dev/null
+    dd if=$img of=/dev/null bs=1K
+
+    for i in {1..5}; do
+        find $mnt -type f | xargs cat > /dev/null
+    done
+}
+
 # create
 fill_image $a
 mke2fs -F -t ext4 $a
@@ -105,6 +119,7 @@ resize2fs $a $min_size_4k
 fsck $a
 
 mnt $a ro
+read_activity $a mnt &
 
 # copy and check
 nc -nlp 2048 | tee >(md5sum >&2) | dd of=$b oflag=direct iflag=fullblock & # receiver
