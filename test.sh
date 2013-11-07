@@ -78,10 +78,9 @@ function read_activity()
     img=$1
     mnt=$2
 
-    dd if=$img of=/dev/null
-    dd if=$img of=/dev/null bs=1K
-
-    for i in {1..5}; do
+    for i in $(seq 1 $create_delete_iterations); do
+        dd if=$img of=/dev/null
+        dd if=$img of=/dev/null bs=1K
         find $mnt -type f | xargs cat > /dev/null
     done
 }
