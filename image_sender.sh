@@ -9,6 +9,7 @@
 
 start_port=255
 bs=16k
+reserve=1000
 
 dst=$1
 shift
@@ -22,7 +23,7 @@ function get_image_size_in_bs()
     # TODO: handle mg/gb and other stuff
     local bs_k=${bs/k/}
 
-    echo $(( fs_count / (bs_k / fs_bs_k) ))
+    echo $(( (fs_count / (bs_k / fs_bs_k)) + reserve ))
 }
 
 set -e
