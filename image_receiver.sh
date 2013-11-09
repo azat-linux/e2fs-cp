@@ -16,7 +16,7 @@ function receive()
     fi
 
     nc -nlp $port | tee -a >(md5sum >&2) | dd of=$fs oflag=direct iflag=fullblock bs=16k
-    e2fsck $fs
+    e2fsck -y $fs
 }
 
 port=$start_port
