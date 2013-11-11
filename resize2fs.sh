@@ -20,10 +20,10 @@ set -x
     diff=$(( $min_size_kb - $(get_min_fs_size_in_kb $fs) ))
 
     if [ $diff -lt 0 ]; then
-        echo "$fs: resize2fs: malformed min size" >&2
+        echo "$fs: resize2fs: malformed min size (less up to $(( 0-diff / 1024 / 1024 ))G)" >&2
         continue
     else
-        echo "$fs: resize2fs: optimal size greater up to $(( $diff / 1024 / 1024 ))G" >&2
+        echo "$fs: resize2fs: optimal size greater up to $(( diff / 1024 / 1024 ))G" >&2
     fi
 
     echo "$fs ${min_size_kb}K >& $logs/$(basename $fs).resize2fs.log"
