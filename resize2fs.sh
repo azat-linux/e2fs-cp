@@ -18,7 +18,7 @@ set -x
     # We will do it ourselfs, and diff what we get.
     #
     diff=$(( $min_size_kb - $(get_min_fs_size_in_kb $fs) ))
-    fs_size=$((get_fs_size_in_kb $fs))
+    fs_size=$(get_fs_size_in_kb $fs)
     accuracy=$((fs_size / 50)) # 2%
 
     if [ $diff -lt 0 ] && [ $((0 - diff)) -gt $accuracy ] ; then
