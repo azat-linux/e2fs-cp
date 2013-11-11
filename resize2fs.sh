@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-#
-# Because resize2fs can't detect minimal block size by itself
-# We will do this in this simple script
-#
-
 . ${0%/*}/common.sh
 
 logs="logs_$(date +%Y%m%d)"
@@ -17,6 +12,11 @@ set -x
 (for fs in $*; do
     min_size_4k=$(resize2fs -P $fs 2>/dev/null | awk '{print $NF}')
     min_size_kb=$(( min_size_4k * 4 ))
+
+    #
+    # Because resize2fs buggy with detecting minimal block size by itself
+    # We will do it ourselfs, and diff what we get.
+    #
     diff=$(( $min_size_kb - $(get_fs_size_in_kb $fs) ))
 
     if [ $diff -lt 0 ]; then
@@ -28,4 +28,3 @@ set -x
 
     echo "$fs ${min_size_kb}K >& $logs/$(basename $fs).resize2fs.log"
 done) | xargs -I{} -P10 bash -c "time resize2fs {}"
-
