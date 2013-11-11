@@ -2,7 +2,6 @@
 
 start_port=255
 bs=16k
-reserve=1000
 
 
 function get_min_block_size_kb()
@@ -28,7 +27,7 @@ function get_image_size_in_bs()
     # TODO: handle mg/gb and other stuff
     local bs_k=${bs/k/}
 
-    echo $(( (fs_count / (bs_k / fs_bs_k)) + reserve ))
+    echo $(( (fs_count / (bs_k / fs_bs_k)) ))
 }
 
 function get_uuid()
