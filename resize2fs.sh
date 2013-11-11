@@ -17,7 +17,7 @@ set -x
     # Because resize2fs buggy with detecting minimal block size by itself
     # We will do it ourselfs, and diff what we get.
     #
-    diff=$(( $min_size_kb - $(get_fs_size_in_kb $fs) ))
+    diff=$(( $min_size_kb - $(get_min_fs_size_in_kb $fs) ))
 
     if [ $diff -lt 0 ]; then
         echo "$fs: resize2fs: malformed min size" >&2
