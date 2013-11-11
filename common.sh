@@ -6,7 +6,11 @@ bs=16k
 
 function get_fs_size_in_kb()
 {
-    local dumpfs=$(dumpe2fs -h $1 | awk -F: '{if ($1 == "Block size") bs=$NF; if ($1 == "Block count") count=$NF;} END {print bs count}')
+    local dumpfs=$(dumpe2fs -h $1 | \
+                   awk -F: '{\
+                       if ($1 == "Block size") bs=$NF; \
+                       if ($1 == "Block count") count=$NF; \
+                   } END {print bs count}')
     local fs_bs_k=$(echo $dumpfs | awk '{print $1/1024}')
     local fs_count=$(echo $dumpfs | awk '{print $2}')
 
