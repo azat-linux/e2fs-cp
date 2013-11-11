@@ -18,16 +18,13 @@ function get_min_block_size_kb()
     echo $reserved_kb_size
 }
 
-function get_image_size_in_bs()
+function get_fs_size_in_kb()
 {
     local dumpfs=$(dumpe2fs -h $1 | awk -F: '{if ($1 == "Block size") bs=$NF; if ($1 == "Block count") count=$NF;} END {print bs count}')
     local fs_bs_k=$(echo $dumpfs | awk '{print $1/1024}')
     local fs_count=$(echo $dumpfs | awk '{print $2}')
 
-    # TODO: handle mg/gb and other stuff
-    local bs_k=${bs/k/}
-
-    echo $(( (fs_count / (bs_k / fs_bs_k)) ))
+    echo $(( fs_count * fs_bs_k ))
 }
 
 # $1 - index

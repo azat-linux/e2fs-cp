@@ -8,6 +8,8 @@
 #
 
 . ${0%/*}/common.sh
+# TODO: handle mg/gb and other stuff
+bs_k=${bs/k/}
 
 reserve=1000
 
@@ -19,6 +21,9 @@ set -x
 
 port=$start_port
 for fs in $*; do
-    dd if=$fs bs=$bs iflag=direct count=$(( $(get_image_size_in_bs $fs) + reserve)) | tee >(md5sum >&2) | nc -q1 $dst $port &
+    fs_size=$(get_fs_size_in_kb $fs)
+    fs_size_in_bs=$(( fs_size / bs_k ))
+
+    dd if=$fs bs=$bs iflag=direct count=$(( fs_size_in_bs + reserve)) | tee >(md5sum >&2) | nc -q1 $dst $port &
     let ++port
 done
