@@ -17,7 +17,7 @@ set -x
 (for fs in $*; do
     min_size_4k=$(resize2fs -P $fs 2>/dev/null | awk '{print $NF}')
     min_size_kb=$(( min_size_4k * 4 ))
-    diff=$(( $min_size_kb - $(get_min_block_size_kb $fs) ))
+    diff=$(( $min_size_kb - $(get_fs_size_in_kb $fs) ))
 
     if [ $diff -lt 0 ]; then
         echo "$fs: resize2fs: malformed min size" >&2
