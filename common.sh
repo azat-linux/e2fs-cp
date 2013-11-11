@@ -18,6 +18,14 @@ function get_min_fs_size_in_kb()
     echo $(( fs_used * fs_bs_k ))
 }
 
+function get_max_fs_size_in_kb()
+{
+    local bytes=$(fdisk -l $1 2>/dev/null | \
+                  grep '^Disk '$1 | \
+                  awk '{print $(NF-1)}')
+    echo $(( bytes / 1024 ))
+}
+
 function get_fs_size_in_kb()
 {
     local dumpfs=$(dumpe2fs -h $1 2>/dev/null | \
