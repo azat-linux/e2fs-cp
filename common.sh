@@ -30,6 +30,7 @@ function get_image_size_in_bs()
     echo $(( (fs_count / (bs_k / fs_bs_k)) ))
 }
 
+# $1 - index
 function get_uuid()
 {
     # TODO: or accept mount points instead of block devices
