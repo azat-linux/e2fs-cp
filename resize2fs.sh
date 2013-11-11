@@ -5,25 +5,13 @@
 # We will do this in this simple script
 #
 
-function get_min_block_size_kb()
-{
-    # We must avoid mount()
-    # since after this we can't resize2fs because
-    # resize/main.c: "fs->super->s_lastcheck < fs->super->s_mtime"
-    # (because other previous checks is passed)
-    mount $1
-    kb_size=$(df -BK $1 | tail -n1 | awk '{print $3}' | tr -d K)
-    umount $1
-
-    reserved_kb_size=$(( kb_size + (1024 * 1024 * 10) )) # 10 GiB
-    echo $reserved_kb_size
-}
-
-set -e
-set -x
+. ${0%/*}/common.sh
 
 logs="logs_$(date +%Y%m%d)"
 mkdir -p $logs
+
+set -e
+set -x
 
 # resize
 (for fs in $*; do

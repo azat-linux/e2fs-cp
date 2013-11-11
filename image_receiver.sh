@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# TODO: add common consts
-start_port=255
+. ${0%/*}/common.sh
 
 set -e
 set -x
@@ -15,7 +14,7 @@ function receive()
         return
     fi
 
-    nc -nlp $port | tee -a >(md5sum >&2) | dd of=$fs oflag=direct iflag=fullblock bs=16k
+    nc -nlp $port | tee -a >(md5sum >&2) | dd of=$fs oflag=direct iflag=fullblock bs=$bs
     e2fsck -f -y $fs
 }
 
