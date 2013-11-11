@@ -10,4 +10,4 @@ set -x
 
 (for fs in $*; do
     echo "$fs $(get_max_fs_size_in_kb $fs)K >& $logs/$(basename $fs).enlarge2fs.log"
-done) | xargs -I{} -P10 bash -c "time resize2fs {}"
+done) | xargs -I{} -P$parallel_max bash -c "time resize2fs {}"

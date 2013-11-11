@@ -2,6 +2,7 @@
 
 start_port=255
 bs=16k
+parallel_max=12
 
 
 function get_min_fs_size_in_kb()

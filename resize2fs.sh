@@ -29,4 +29,4 @@ set -x
     fi
 
     echo "$fs ${min_size_kb}K >& $logs/$(basename $fs).resize2fs.log"
-done) | xargs -I{} -P10 bash -c "time resize2fs {}"
+done) | xargs -I{} -P$parallel_max bash -c "time resize2fs {}"
