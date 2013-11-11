@@ -6,7 +6,7 @@ bs=16k
 
 function get_min_fs_size_in_kb()
 {
-    local dumpfs=$(dumpe2fs -h $1 | \
+    local dumpfs=$(dumpe2fs -h $1 2>/dev/null | \
                    awk -F: '{\
                        if ($1 == "Block size") bs=$NF; \
                        if ($1 == "Block count") count=$NF; \
@@ -20,7 +20,7 @@ function get_min_fs_size_in_kb()
 
 function get_fs_size_in_kb()
 {
-    local dumpfs=$(dumpe2fs -h $1 | \
+    local dumpfs=$(dumpe2fs -h $1 2>/dev/null | \
                    awk -F: '{\
                        if ($1 == "Block size") bs=$NF; \
                        if ($1 == "Block count") count=$NF; \
