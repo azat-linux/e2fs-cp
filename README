@@ -9,3 +9,9 @@ TODO
 - getopt
 - mount/unmount
 - waitpid
+
+NOTES
+=====
+
+- md5sum is 300-400 MB/s so it won't slow down copying
+  (and it is used, just in case)

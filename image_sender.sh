@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 #
-# NOTE: md5sum is 300-400 MB/s so it won't slow down copying
-#
 # Examples:
 #   One->One : ./image_sender dst.com /dev/sd?1
 #   One->Many: ./image_sender "dst1.com dst2.com" /dev/sd?1
