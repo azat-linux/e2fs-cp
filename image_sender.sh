@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
 #
-# TODO: resize partition before copying
-#       this will eliminate "count" option for dd
-#
 # NOTE: md5sum is 300-400 MB/s so it won't slow down copying
 #
 
