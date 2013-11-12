@@ -20,6 +20,9 @@ fi
 set -e
 set -x
 
+logs="logs_$(date +%Y%m%d)"
+mkdir -p $logs
+
 # TODO: do we need to calc md5sum from $fs
 function receive_and_proxy()
 {
@@ -44,7 +47,7 @@ function receive_and_proxy()
     fi
     cmd+="dd of=$fs oflag=direct iflag=fullblock bs=$bs"
     bash -c "$cmd"
-    e2fsck -f -y $fs
+    e2fsck -f -y $fs >& $logs/$(basename $fs).image_receiver.e2fsck.log
 }
 
 port=$start_port
