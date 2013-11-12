@@ -5,7 +5,7 @@
 #   One->One  : ./image_receive /dev/sd?1
 #   One->Proxy: ./image_receive dst.com /dev/sd?1
 #   One->Proxy: ./image_receive dst.com:255 /dev/sda1
-#   One->Proxy: ./image_receive "dst.com:255 dst.com:255" /dev/sda1 /dev/sdb1
+#   One->Proxy: ./image_receive "dst.com:255 dst.com:256" /dev/sda1 /dev/sdb1
 #
 
 . ${0%/*}/common.sh
