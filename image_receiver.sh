@@ -5,22 +5,22 @@
 #   One->One  : ./image_receive /dev/sd?1
 #   One->Proxy: ./image_receive dst.com /dev/sd?1
 #   One->Proxy: ./image_receive dst.com:255 /dev/sda1
-#
-# TODO: add servers as csv string, to allow bypass host:port2,host:port2 string
+#   One->Proxy: ./image_receive "dst.com:255 dst.com:255" /dev/sda1 /dev/sdb1
 #
 
 . ${0%/*}/common.sh
 
-proxy_to=""
+proxy_to_dsts=""
 # TODO: more accurate check
 if [ ! -e "$1" ]; then
-    proxy_to="$1"
+    proxy_to_dsts=($1)
     shift
 fi
 
 set -e
 set -x
 
+# TODO: do we need to calc md5sum from $fs
 function receive_and_proxy()
 {
     local port=$1
@@ -48,8 +48,9 @@ function receive_and_proxy()
 }
 
 port=$start_port
+i=0
 for fs in $*; do
-    receive_and_proxy $port $fs $proxy_to &
-    # TODO: do we need to calc md5sum from $fs
+    receive_and_proxy $port $fs ${proxy_to_dsts[i]} &
     let ++port
+    let ++i
 done
