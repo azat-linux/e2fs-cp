@@ -52,5 +52,7 @@ i=0
 for fs in $*; do
     receive_and_proxy $port $fs ${proxy_to_dsts[i]} &
     let ++port
-    let ++i
+    if [ ! -z "${proxy_to_dsts[i+1]}"]; then
+        let ++i
+    fi
 done
