@@ -1,27 +1,55 @@
 #!/usr/bin/env bash
 
+#
+# Examples:
+#   One->One  : ./image_receive /dev/sd?1
+#   One->Proxy: ./image_receive dst.com /dev/sd?1
+#   One->Proxy: ./image_receive dst.com:255 /dev/sda1
+#
+# TODO: add servers as csv string, to allow bypass host:port2,host:port2 string
+#
+
 . ${0%/*}/common.sh
+
+proxy_to=""
+# TODO: more accurate check
+if [ ! -e "$1" ]; then
+    proxy_to="$1"
+    shift
+fi
 
 set -e
 set -x
 
-function receive()
+function receive_and_proxy()
 {
-    fs=$1
+    local port=$1
+    local fs=$2
+    local proxy_dst_str=$3
+
+    local proxy_dst=${proxy_dst_str/:*}
+    local proxy_port=${proxy_dst_str/*:}
+    if [ -z "$proxy_port" ] || [ "$proxy_port" = "$proxy_dst" ]; then
+        proxy_port=$port
+    fi
 
     if $( df $fs | tail -n+2 | grep -q $fs ); then
         echo "$fs is mounted" >&2
         return
     fi
 
-    nc -nlp $port | tee -a >(md5sum >&2) | dd of=$fs oflag=direct iflag=fullblock bs=$bs
+    cmd="nc -nlp $port | tee >(md5sum >&2) | "
+    if [ ! -z "$proxy_dst" ]; then
+        cmd+="tee >(nc -q1 $proxy_dst $proxy_port) | "
+    fi
+    cmd+="dd of=$fs oflag=direct iflag=fullblock bs=$bs"
+    bash -c "$cmd"
     e2fsck -f -y $fs
 }
 
 port=$start_port
 for fs in $*; do
-    receive $fs &
+    receive_and_proxy $port $fs $proxy_to &
     # TODO: do we need to calc md5sum from $fs
     let ++port
 done
-
