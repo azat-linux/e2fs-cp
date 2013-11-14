@@ -36,7 +36,7 @@ function receive_and_proxy()
         proxy_port=$port
     fi
 
-    if $( df $fs | tail -n+2 | grep -q $fs ); then
+    if mounted $fs; then
         echo "$fs is mounted" >&2
         return
     fi
