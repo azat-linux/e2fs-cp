@@ -49,7 +49,8 @@ function get_uuid()
     echo "$fstab_line" | cut -d' ' -f1 | cut -d= -f2
 }
 
+# TODO: resolve UUID's
 function mounted()
 {
-    df $1 | tail -n+2 | grep -q $1
+    df | grep -q "^$1"
 }
