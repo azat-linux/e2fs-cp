@@ -4,6 +4,8 @@
 # Aggregate functional of all helpers
 # from this utils
 #
+# TODO: This script is just as an example
+#
 
 function copy_scripts()
 {
