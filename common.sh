@@ -44,7 +44,10 @@ function get_fs_size_in_kb()
 function get_uuid()
 {
     # TODO: or accept mount points instead of block devices
-    fstab_line=$(grep ext4 /etc/fstab | egrep -v ' (/usr|/|/home|/var|) ' | tail -n+$1 | head -n1)
+    fstab_line=$(grep ext4 /etc/fstab | \
+                 egrep -v $(df | tail -n+2 | awk '{printf "%s|", $NF}' | sed 's/|$//') | \
+                 tail -n+$1 | \
+                 head -n1)
 
     echo "$fstab_line" | cut -d' ' -f1 | cut -d= -f2
 }
