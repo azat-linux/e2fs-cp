@@ -45,7 +45,7 @@ function get_uuid()
 {
     # TODO: or accept mount points instead of block devices
     fstab_line=$(grep ext4 /etc/fstab | \
-                 egrep -v $(df | tail -n+2 | awk '{printf "%s|", $NF}' | sed 's/|$//') | \
+                 egrep -v "[\t ]$(df | tail -n+2 | awk '{printf "%s|", $NF}' | sed 's/|$//')[\t ]" | \
                  tail -n+$1 | \
                  head -n1)
 
