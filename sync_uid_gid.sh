@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export parentPid=$$
+
 orig_uids=$1
 orig_gids=$2
 
@@ -22,6 +24,7 @@ function change_uid()
     echo "Conficts for: $1"
 
     while IFS=$'\n' read line; do
+        [[ "$line" =~ "is currently used by process" ]] && echo "$line" && kill $parentPid
         local uid=$(match_id "$line")
         [ -z "$uid" ] && echo "$line" && continue
         local login=$(get_login passwd $uid)
