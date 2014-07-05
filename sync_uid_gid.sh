@@ -19,6 +19,8 @@ function get_login()
 }
 function change_uid()
 {
+    echo "Conficts for: $1"
+
     while IFS=$'\n' read line; do
         local uid=$(match_id "$line")
         [ -z "$uid" ] && echo "$line" && continue
@@ -34,6 +36,8 @@ function change_uid()
 }
 function change_gid()
 {
+    echo "Conficts for: $1"
+
     while IFS=$'\n' read line; do
         local gid=$(match_id "$line")
         [ -z "$gid" ] && echo "$line" && continue
@@ -51,20 +55,24 @@ function change_gid()
 function uids()
 {
     for u in $uids_to_sync; do
+        echo "Login: $u"
         local o=$(grep "^${u}:" $orig_uids | cut -d: -f3)
-        while ! $( usermod -u $o $u 2> >( change_uid >&2 ) ); do
+        while ! $( usermod -u $o $u 2> >( change_uid $u >&2 ) ); do
             echo "Trying one more time"
         done
+        echo "Finish"
     done
 }
 
 function gids()
 {
     for g in $gids_to_sync; do
+        echo "Group: $g"
         local o=$(grep "^${g}:" $orig_gids | cut -d: -f3)
-        while ! $(groupmod -g $o $g 2> >( change_gid >&2 ) ); do
+        while ! $(groupmod -g $o $g 2> >( change_gid $g >&2 ) ); do
             echo "Trying one more time"
         done
+        echo "Finish"
     done
 }
 
