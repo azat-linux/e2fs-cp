@@ -6,8 +6,8 @@ orig_gids=$2
 uids_to_sync=$3
 gids_to_sync=$4
 
-u_start=1100
-g_start=1100
+u_start=${5:-1100}
+g_start=${6:-1100}
 
 function match_id()
 {
