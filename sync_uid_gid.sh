@@ -79,5 +79,36 @@ function gids()
     done
 }
 
+if [ -z "$orig_uids" ] && [ -z "$orig_gids" ]; then
+    cat <<"EOL" >&2
+Sync uid/gid{s}.
+Firstly install desired uid in $orig_uids file, and gid in $orig_gids'
+After use the next command: $0 /path/to/uids /path/to/gids users groups"
+
+For example if you want to change foo and bar uid/gid (not tested well):
+-----------------------------------------------------------------------
+$ diff -u0 passwd.orig passwd
+--- passwd.orig 2014-09-26 13:23:45.991658391 +0400
++++ passwd      2014-09-26 13:24:22.203658699 +0400
+@@ -28 +28 @@
+-foo:x:1000:1001::/home/foo:/bin/bash
++foo:x:1007:1001::/home/foo:/bin/bash
+@@ -35 +35 @@
+-bar:x:1007:1008::/home/bar:/bin/bash
++bar:x:1000:1008::/home/bar:/bin/bash
+s$ diff -u0 group.orig group
+--- group.orig  2014-09-26 13:23:50.019658426 +0400
++++ group       2014-09-26 13:24:25.635658728 +0400
+@@ -50 +50 @@
+-foo:x:1000:foo
++foo:x:1008:foo
+@@ -58 +58 @@
+-bar:x:1008:bar
++bar:x:1000:bar
+-----------------------------------------------------------------------
+./sync_uid_gid.sh passwd group 'foo bar' 'foo bar'
+EOL
+    exit 1
+fi
 uids
 gids
