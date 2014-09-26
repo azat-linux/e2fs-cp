@@ -21,7 +21,7 @@ function get_login()
 }
 function change_uid()
 {
-    echo "Conficts for: $1"
+    echo "Conflicts for: $1"
 
     while IFS=$'\n' read line; do
         [[ "$line" =~ "is currently used by process" ]] && echo "$line" && kill $parentPid
