@@ -50,7 +50,7 @@ function get_uuid()
                  tail -n+$1 | \
                  head -n1)
 
-    echo "$fstab_line" | cut -d' ' -f1 | cut -d= -f2
+    echo "$fstab_line" | awk -F'[= \t]' '{print $2}'
 }
 
 # TODO: resolve UUID's
