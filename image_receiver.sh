@@ -41,7 +41,7 @@ function receive_and_proxy()
         return
     fi
 
-    cmd="nc -nlp $port | tee >(md5sum >&2) | "
+    local cmd="nc -nlp $port | tee >(md5sum >&2) | "
     if [ ! -z "$proxy_dst" ]; then
         cmd+="tee >(nc -q1 $proxy_dst $proxy_port) | "
     fi
