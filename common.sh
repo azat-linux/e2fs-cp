@@ -58,3 +58,9 @@ function mounted()
 {
     df | grep -q "^$1"
 }
+
+# mounted read-only/ro
+function read_only()
+{
+    egrep -q "^$1 .*[, ]ro[, ]" /proc/mounts
+}
