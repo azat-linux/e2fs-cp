@@ -43,11 +43,13 @@ function get_fs_size_in_kb()
 # $1 - index
 function get_uuid()
 {
+    local type=$1
+    local i=$2
     # TODO: or accept mount points instead of block devices
-    fstab_line=$(grep ext4 /etc/fstab | \
+    fstab_line=$(grep $type /etc/fstab | \
                  grep -v ^# | \
                  egrep -v "[	 ]($(df | tail -n+2 | awk '{printf "%s|", $NF}' | sed 's/|$//'))[	 ]" | \
-                 tail -n+$1 | \
+                 tail -n+$i | \
                  head -n1)
 
     echo "$fstab_line" | awk -F'[= \t]' '{print $2}'
@@ -63,4 +65,9 @@ function mounted()
 function read_only()
 {
     egrep -q "^$1 .*[, ]ro[, ]" /proc/mounts
+}
+
+function get_fstype()
+{
+    blkid $@ | cut -d'"' -f4
 }
