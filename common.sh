@@ -58,7 +58,7 @@ function get_uuid()
 # TODO: resolve UUID's
 function mounted()
 {
-    df | grep -q "^$1"
+    grep -q "^$1 " /proc/mounts
 }
 
 # mounted read-only/ro
